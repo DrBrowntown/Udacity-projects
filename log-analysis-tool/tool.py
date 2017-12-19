@@ -1,4 +1,4 @@
-#! /usr/bin/env python 3
+#! /usr/bin/env python
 
 import psycopg2
 from datetime import datetime
