@@ -42,6 +42,10 @@ function loadData() {
     }).error(function(e){
         $nytHeaderElem.text('New York Times Articles Could Not Be Loaded');
     });
+
+    var wikiRequestTimeout = setTimeout(function() {
+        $wikiElem.text("Failed to get Wikipedia resources.");
+    }, 8000);
     
    //load wikipedia articles 
     var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + cityStr + '&format=json';
@@ -59,6 +63,8 @@ function loadData() {
                 var url = 'https://en.wikipedia.org/wiki/' + articleStr;
                 $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li>');
             };
+
+            clearTimeout(wikiRequestTimeout);
         }
     });
 
