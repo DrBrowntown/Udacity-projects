@@ -42,7 +42,7 @@ function loadData() {
     }).error(function(e){
         $nytHeaderElem.text('New York Times Articles Could Not Be Loaded');
     });
-
+    //Error handling for if something breaks in the wiki API
     var wikiRequestTimeout = setTimeout(function() {
         $wikiElem.text("Failed to get Wikipedia resources.");
     }, 8000);
