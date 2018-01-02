@@ -43,10 +43,10 @@ function loadData() {
         $nytHeaderElem.text('New York Times Articles Could Not Be Loaded');
     });
     
-    
+   //load wikipedia articles 
     var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + cityStr + '&format=json';
     console.log(wikiUrl);
-
+    //gets json file from wiki api
     $.ajax({
         url: wikiUrl,
         dataType: "jsonp",
