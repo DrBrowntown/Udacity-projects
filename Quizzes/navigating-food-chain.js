@@ -16,6 +16,8 @@
 var eatsPlants = true;
 var eatsAnimals = false;
 
-var category = (eatsPlants && !eatsAnimals ? "herbivore" : "carnivore") || (eatsPlants && eatsAnimals ? "omnivore" : undefined;)
+var category = eatsPlants ? (eatsAnimals ? "omnivore": "herbivore") : 
+(eatsAnimals ? "carnivore" : undefined); 
 
 console.log(category);
+
