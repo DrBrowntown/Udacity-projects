@@ -26,3 +26,20 @@ if ((flavor === "vanilla" || flavor === "chocolate")
     + flavor + " ice cream in a " + vessel 
     + " with " + toppings +".");
 }
+
+
+
+var shirtWidth = 20;
+var shirtLength = 29;
+var shirtSleeve = 8.39;
+
+
+if (shirtWidth < 20 && shirtLength < 29 && shirtSleeve < 8.38) {
+    console.log("S");
+} else if ((shirtWidth > 19 && shirtWidth < 22) 
+    && (shirtLength > 28 && shirtLength < 30) 
+    && (shirtSleeve > 8.38 && shirtSleeve < 8.63)) {
+    console.log("M");
+} else {
+    console.log("N/A");
+}
