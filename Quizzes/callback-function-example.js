@@ -17,6 +17,12 @@ helloCat(catSays);
 
 
 
+
+
+
+
+
+
 //Example of passign an inline function. 
 
 // Function declaration that takes in two arguments: a function for displaying
