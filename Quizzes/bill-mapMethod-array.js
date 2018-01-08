@@ -20,11 +20,17 @@ var bills = [50.23, 19.12, 34.01,
 ];
 
 var calc = bills.map(function(elem) {
-    elem = (elem * .15) + elem;
+    elem = elem * 1.15;
     elem = elem.toFixed(2);      
     return elem;
 });
 
 var totals = calc.map(Number);
+
+console.log(totals);
+
+
+//Better Version
+var totals = bills.map(bill => Number((bill * 1.15).toFixed(2)));
 
 console.log(totals);
