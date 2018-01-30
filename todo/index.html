@@ -29,6 +29,7 @@
 				<label><%- title %> <%= completed ? ' --done!' : '' %></label>
                 <button class="edit-btn"></button>
 				<button class="destroy"></button>
+                <button class="priority-btn"></button>
 			</div>
 			<input class="edit" value="<%- title %>">
 		</script>
@@ -44,6 +45,9 @@
 				<li>
 					<a href="#/completed">Completed</a>
 				</li>
+                <li>
+                    <a href="#/priority">Priority</a>
+                </li>
 			</ul>
 			<% if (completed) { %>
 			<button id="clear-completed">Clear completed (<%= completed %>)</button>
