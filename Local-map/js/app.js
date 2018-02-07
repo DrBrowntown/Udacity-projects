@@ -1,10 +1,7 @@
 // Global variables
 var map;
-
 // Create a new blank array for all the listing markers.
 var markers = [];
-
-
 // Create placemarkers array to use in multiple functions to have control
 // over the number of places that show.
 var placeMarkers = [];
@@ -18,8 +15,7 @@ function initMap() {
     styles: styles,
     mapTypeControl: false
   });
-
-  
+ 
   // Create a searchbox in order to execute a places search
   var searchBox = new google.maps.places.SearchBox(
       document.getElementById('places-search'));
@@ -36,14 +32,17 @@ function initMap() {
   var highlightedIcon = makeMarkerIcon('FFFF24');
 
   // The following group uses the location array to create an array of markers on initialize.
+  
   for (var i = 0; i < locations.length; i++) {
     // Get the position from the location array.
     var position = locations[i].location;
     var title = locations[i].title;
+    var type = locations[i].type;
     // Create a marker per location, and put into markers array.
     var marker = new google.maps.Marker({
       position: position,
       title: title,
+      type: type,
       animation: google.maps.Animation.DROP,
       icon: defaultIcon,
       id: i
@@ -65,6 +64,8 @@ function initMap() {
   }
   document.getElementById('show-listings').addEventListener('click', showListings);
 
+  document.getElementById('show-restaurants').addEventListener('click', showRestaurants);
+
   document.getElementById('hide-listings').addEventListener('click', function() {
     hideMarkers(markers);
   });
@@ -78,9 +79,7 @@ function initMap() {
   // Listen for the event fired when the user selects a prediction and clicks
   // "go" more details for that place.
   document.getElementById('go-places').addEventListener('click', textSearchPlaces);
-
  
-  
 }
 
 // This function populates the infowindow when the marker is clicked. We'll only allow
@@ -134,9 +133,25 @@ function showListings() {
   var bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
   for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
-    bounds.extend(markers[i].position);
+    if (markers[i].type == 'real-estate') {
+      markers[i].setMap(map);
+      bounds.extend(markers[i].position);
+    }    
   }
+  map.fitBounds(bounds);
+}
+
+
+// This function will loop through the markers array and display them all.
+function showRestaurants() {
+  var bounds = new google.maps.LatLngBounds();
+  // Extend the boundaries of the map for each marker and display the marker
+  for (var i = 0; i < markers.length; i++) {
+    if (markers[i].type == 'restaurant') {
+      markers[i].setMap(map);
+      bounds.extend(markers[i].position);
+    }  
+  }  
   map.fitBounds(bounds);
 }
 
