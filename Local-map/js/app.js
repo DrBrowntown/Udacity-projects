@@ -130,6 +130,7 @@ function populateInfoWindow(marker, infowindow) {
 
 // This function will loop through the markers array and display them all.
 function showListings() {
+  hideMarkers(markers);
   var bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
   for (var i = 0; i < markers.length; i++) {
@@ -144,6 +145,7 @@ function showListings() {
 
 // This function will loop through the markers array and display them all.
 function showRestaurants() {
+  hideMarkers(markers);
   var bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
   for (var i = 0; i < markers.length; i++) {
