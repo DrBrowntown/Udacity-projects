@@ -9,7 +9,7 @@ body {
 
 .container {
   height: 100%;
-  
+
   position: relative;
 }
 
@@ -40,6 +40,7 @@ hr {
   bottom:0px;
   height: 100%;
   left: 362px;
+  width: 100%;
   position: absolute;
   right: 0px;
 }
@@ -53,6 +54,7 @@ hr {
   padding: 10px 10px 30px 10px;
   text-align: left;
   width: 340px;
+  margin: 0;
 }
 
 #pano {
@@ -69,16 +71,3 @@ hr {
   font-size: 12px;
 }
 
-#toggle-drawing {
-  width: 27%;
-  position: relative;
-  margin-left: 10px;
-}
-
-#zoom-to-area-text {
-  width: 70%;
-}
-
-#zoom-to-area {
-  width: 24%;
-}
