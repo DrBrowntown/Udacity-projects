@@ -66,6 +66,8 @@ function initMap() {
 
   document.getElementById('show-restaurants').addEventListener('click', showRestaurants);
 
+  document.getElementById('show-museums').addEventListener('click', showMuseums);
+
   document.getElementById('hide-listings').addEventListener('click', function() {
     hideMarkers(markers);
   });
@@ -128,7 +130,7 @@ function populateInfoWindow(marker, infowindow) {
   }
 }
 
-// This function will loop through the markers array and display them all.
+// This function will loop through the markers array and display real-estate.
 function showListings() {
   hideMarkers(markers);
   var bounds = new google.maps.LatLngBounds();
@@ -142,14 +144,27 @@ function showListings() {
   map.fitBounds(bounds);
 }
 
-
-// This function will loop through the markers array and display them all.
+// This function will loop through the markers array and display restaurants.
 function showRestaurants() {
   hideMarkers(markers);
   var bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
   for (var i = 0; i < markers.length; i++) {
     if (markers[i].type == 'restaurant') {
+      markers[i].setMap(map);
+      bounds.extend(markers[i].position);
+    }  
+  }  
+  map.fitBounds(bounds);
+}
+
+// This function will loop through the markers array and display museums.
+function showMuseums() {
+  hideMarkers(markers);
+  var bounds = new google.maps.LatLngBounds();
+  // Extend the boundaries of the map for each marker and display the marker
+  for (var i = 0; i < markers.length; i++) {
+    if (markers[i].type == 'museum') {
       markers[i].setMap(map);
       bounds.extend(markers[i].position);
     }  
