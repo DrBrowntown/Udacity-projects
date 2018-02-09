@@ -25,11 +25,13 @@ h1 {
 }
 
 #hide-listings,
-#show-listings,
-#show-restaurants,
-#show-museums {
-  width: 48%;
-  margin: 5px;
+
+#search-museums,
+#search-restaurants,
+#search-bars,
+#search-shops {
+  width: 100%;
+  margin: 2px;
 }
 
 hr {

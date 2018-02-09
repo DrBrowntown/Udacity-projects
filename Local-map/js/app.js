@@ -62,14 +62,16 @@ function initMap() {
       this.setIcon(defaultIcon);
     });
   }
-  document.getElementById('show-listings').addEventListener('click', showListings);
+  document.getElementById('search-museums').addEventListener('click', searchMuseums);
 
-  document.getElementById('show-restaurants').addEventListener('click', showRestaurants);
+  document.getElementById('search-restaurants').addEventListener('click', searchRestaurants);
 
-  document.getElementById('show-museums').addEventListener('click', showMuseums);
+  document.getElementById('search-bars').addEventListener('click', searchBars);
+
+  document.getElementById('search-shops').addEventListener('click', searchShops);
 
   document.getElementById('hide-listings').addEventListener('click', function() {
-    hideMarkers(markers);
+    hideMarkers(placeMarkers);
   });
 
   // Listen for the event fired when the user selects a prediction from the
@@ -88,18 +90,19 @@ function initMap() {
 // one infowindow which will open at the marker that is clicked, and populate based
 // on that markers position.
 function populateInfoWindow(marker, infowindow) {
-  
+       
 }
 
 
 
 // This function will loop through the markers array and display real-estate.
-function showListings() {
+function searchMuseums() {
   hideMarkers(placeMarkers);
+  hideMarkers(markers);
   var bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
   for (var i = 0; i < markers.length; i++) {
-    if (markers[i].type == 'real-estate') {
+    if (markers[i].type == 'museum-search') {
       var placesService = new google.maps.places.PlacesService(map);
         placesService.textSearch({
           query: markers[i].title,
@@ -116,30 +119,71 @@ function showListings() {
 }
      
 // This function will loop through the markers array and display restaurants.
-function showRestaurants() {
+function searchRestaurants() {
   hideMarkers(placeMarkers);
-  var bounds = new google.maps.LatLngBounds();
-  // Extend the boundaries of the map for each marker and display the marker
-  for (var i = 0; i < markers.length; i++) {
-    if (markers[i].type == 'restaurant') {
-      markers[i].setMap(map);
-      bounds.extend(markers[i].position);
-    }  
-  }  
-  map.fitBounds(bounds);
-}
-
-// This function will loop through the markers array and display museums.
-function showMuseums() {
   hideMarkers(markers);
   var bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
   for (var i = 0; i < markers.length; i++) {
-    if (markers[i].type == 'museum') {
-      markers[i].setMap(map);
-      bounds.extend(markers[i].position);
-    }  
-  }  
+    if (markers[i].type == 'restaurant-search') {
+      var placesService = new google.maps.places.PlacesService(map);
+        placesService.textSearch({
+          query: markers[i].title,
+          bounds: bounds
+        }, function(results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            createMarkersForPlaces(results);
+          }
+        });
+        bounds.extend(myLatLng);      
+    }    
+  }
+  map.fitBounds(bounds);
+}
+
+// This function will loop through the markers array and display museums.
+function searchBars() {
+  hideMarkers(placeMarkers);
+  hideMarkers(markers);
+  var bounds = new google.maps.LatLngBounds();
+  // Extend the boundaries of the map for each marker and display the marker
+  for (var i = 0; i < markers.length; i++) {
+    if (markers[i].type == 'bar-search') {
+      var placesService = new google.maps.places.PlacesService(map);
+        placesService.textSearch({
+          query: markers[i].title,
+          bounds: bounds
+        }, function(results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            createMarkersForPlaces(results);
+          }
+        });
+        bounds.extend(myLatLng);      
+    }    
+  }
+  map.fitBounds(bounds);
+}
+
+// This function will loop through the markers array and display shops.
+function searchShops() {
+  hideMarkers(placeMarkers);
+  hideMarkers(markers);
+  var bounds = new google.maps.LatLngBounds();
+  // Extend the boundaries of the map for each marker and display the marker
+  for (var i = 0; i < markers.length; i++) {
+    if (markers[i].type == 'shop-search') {
+      var placesService = new google.maps.places.PlacesService(map);
+        placesService.textSearch({
+          query: markers[i].title,
+          bounds: bounds
+        }, function(results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            createMarkersForPlaces(results);
+          }
+        });
+        bounds.extend(myLatLng);      
+    }    
+  }
   map.fitBounds(bounds);
 }
 
@@ -207,12 +251,14 @@ function createMarkersForPlaces(places) {
     };
     // Create a marker for each place.
     var marker = new google.maps.Marker({
+
       map: map,
       icon: icon,
       title: place.name,
       position: place.geometry.location,
       id: place.place_id
     });
+    marker.setAnimation( google.maps.Animation.DROP ); 
     // Create a single infowindow to be used with the place details information
     // so that only one is open at once.
     var placeInfoWindow = new google.maps.InfoWindow();
@@ -222,6 +268,7 @@ function createMarkersForPlaces(places) {
         console.log("This infowindow already is on this marker!");
       } else {
         getPlacesDetails(this, placeInfoWindow);
+
       }
     });
     placeMarkers.push(marker);
@@ -273,6 +320,7 @@ service.getDetails({
     innerHTML += '</div>';
     infowindow.setContent(innerHTML);
     infowindow.open(map, marker);
+    loadData(place.name);
     // Make sure the marker property is cleared if the infowindow is closed.
     infowindow.addListener('closeclick', function() {
       infowindow.marker = null;
@@ -280,4 +328,43 @@ service.getDetails({
   }
 });
 }
+
+function loadData(place) {
+
+    var $body = $('body');
+    var $wikiElem = $('#wikipedia-links');    
+
+    // clear out old data before new request
+    $wikiElem.text("");  
+    
+    var cityStr = place;    
+   
+    //Error handling for if something breaks in the wiki API
+    var wikiRequestTimeout = setTimeout(function() {
+        $wikiElem.text("Failed to get Wikipedia resources.");
+    }, 8000);
+    
+   //load wikipedia articles 
+    var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + cityStr + '&format=json';
+    console.log(wikiUrl);
+    //gets json file from wiki api
+    $.ajax({
+        url: wikiUrl,
+        dataType: "jsonp",
+        //jsonp: "callback"
+        success: function( response ) {
+            var articleList = response[1];
+
+            for (var i = 0; i < articleList.length; i++) {
+                articleStr = articleList[i];
+                var url = 'https://en.wikipedia.org/wiki/' + articleStr;
+                $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li>');
+            };
+
+            clearTimeout(wikiRequestTimeout);
+        }
+    });
+
+    return false;
+};
 
