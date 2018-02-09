@@ -1,7 +1,5 @@
 // Global variables
 var map;
-// Create a new blank array for all the listing markers.
-var markers = [];
 // Create placemarkers array to use in multiple functions to have control
 // over the number of places that show.
 var placeMarkers = [];
@@ -24,43 +22,20 @@ function initMap() {
   
   var largeInfowindow = new google.maps.InfoWindow();
 
-  // Style the markers a bit. This will be our listing marker icon.
-  var defaultIcon = makeMarkerIcon('0091ff');
-
-  // Create a "highlighted location" marker color for when the user
-  // mouses over the marker.
-  var highlightedIcon = makeMarkerIcon('FFFF24');
-
-  // The following group uses the location array to create an array of markers on initialize.
+  // The following group uses the location array (lcoations.js) to create an array of markers on initialize.
   
-  for (var i = 0; i < locations.length; i++) {
-    // Get the position from the location array.
-    var position = locations[i].location;
+  for (var i = 0; i < locations.length; i++) {  
     var title = locations[i].title;
     var type = locations[i].type;
     // Create a marker per location, and put into markers array.
     var marker = new google.maps.Marker({
-      position: position,
       title: title,
-      type: type,
-      animation: google.maps.Animation.DROP,
-      icon: defaultIcon,
-      id: i
+      type: type,        
     });
     // Push the marker to our array of markers.
-    markers.push(marker);
+    placeMarkers.push(marker);
     // Create an onclick event to open the large infowindow at each marker.
-    marker.addListener('click', function() {
-      populateInfoWindow(this, largeInfowindow);
-    });
-    // Two event listeners - one for mouseover, one for mouseout,
-    // to change the colors back and forth.
-    marker.addListener('mouseover', function() {
-      this.setIcon(highlightedIcon);
-    });
-    marker.addListener('mouseout', function() {
-      this.setIcon(defaultIcon);
-    });
+    
   }
   document.getElementById('search-museums').addEventListener('click', searchMuseums);
 
@@ -86,26 +61,17 @@ function initMap() {
  
 }
 
-// This function populates the infowindow when the marker is clicked. We'll only allow
-// one infowindow which will open at the marker that is clicked, and populate based
-// on that markers position.
-function populateInfoWindow(marker, infowindow) {
-       
-}
-
-
-
 // This function will loop through the markers array and display real-estate.
 function searchMuseums() {
   hideMarkers(placeMarkers);
-  hideMarkers(markers);
+  
   var bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
-  for (var i = 0; i < markers.length; i++) {
-    if (markers[i].type == 'museum-search') {
+  for (var i = 0; i < placeMarkers.length; i++) {
+    if (placeMarkers[i].type == 'museum-search') {
       var placesService = new google.maps.places.PlacesService(map);
         placesService.textSearch({
-          query: markers[i].title,
+          query: placeMarkers[i].title,
           bounds: bounds
         }, function(results, status) {
           if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -121,14 +87,14 @@ function searchMuseums() {
 // This function will loop through the markers array and display restaurants.
 function searchRestaurants() {
   hideMarkers(placeMarkers);
-  hideMarkers(markers);
+  
   var bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
-  for (var i = 0; i < markers.length; i++) {
-    if (markers[i].type == 'restaurant-search') {
+  for (var i = 0; i < placeMarkers.length; i++) {
+    if (placeMarkers[i].type == 'restaurant-search') {
       var placesService = new google.maps.places.PlacesService(map);
         placesService.textSearch({
-          query: markers[i].title,
+          query: placeMarkers[i].title,
           bounds: bounds
         }, function(results, status) {
           if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -144,14 +110,14 @@ function searchRestaurants() {
 // This function will loop through the markers array and display museums.
 function searchBars() {
   hideMarkers(placeMarkers);
-  hideMarkers(markers);
+  
   var bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
-  for (var i = 0; i < markers.length; i++) {
-    if (markers[i].type == 'bar-search') {
+  for (var i = 0; i < placeMarkers.length; i++) {
+    if (placeMarkers[i].type == 'bar-search') {
       var placesService = new google.maps.places.PlacesService(map);
         placesService.textSearch({
-          query: markers[i].title,
+          query: placeMarkers[i].title,
           bounds: bounds
         }, function(results, status) {
           if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -167,14 +133,14 @@ function searchBars() {
 // This function will loop through the markers array and display shops.
 function searchShops() {
   hideMarkers(placeMarkers);
-  hideMarkers(markers);
+  
   var bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
-  for (var i = 0; i < markers.length; i++) {
-    if (markers[i].type == 'shop-search') {
+  for (var i = 0; i < placeMarkers.length; i++) {
+    if (placeMarkers[i].type == 'shop-search') {
       var placesService = new google.maps.places.PlacesService(map);
         placesService.textSearch({
-          query: markers[i].title,
+          query: placeMarkers[i].title,
           bounds: bounds
         }, function(results, status) {
           if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -189,23 +155,9 @@ function searchShops() {
 
 // This function will loop through the listings and hide them all.
 function hideMarkers(markers) {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(null);
+  for (var i = 0; i < placeMarkers.length; i++) {
+    placeMarkers[i].setMap(null);
   }
-}
-
-// This function takes in a COLOR, and then creates a new marker
-// icon of that color. The icon will be 21 px wide by 34 high, have an origin
-// of 0, 0 and be anchored at 10, 34).
-function makeMarkerIcon(markerColor) {
-  var markerImage = new google.maps.MarkerImage(
-    'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
-    '|40|_|%E2%80%A2',
-    new google.maps.Size(21, 34),
-    new google.maps.Point(0, 0),
-    new google.maps.Point(10, 34),
-    new google.maps.Size(21,34));
-  return markerImage;
 }
 
 // This function fires when the user selects a searchbox picklist item.
@@ -320,6 +272,7 @@ service.getDetails({
     innerHTML += '</div>';
     infowindow.setContent(innerHTML);
     infowindow.open(map, marker);
+    //Uses wikipedia API to search for articles relevant to the location name.
     loadData(place.name);
     // Make sure the marker property is cleared if the infowindow is closed.
     infowindow.addListener('closeclick', function() {
@@ -328,6 +281,8 @@ service.getDetails({
   }
 });
 }
+
+//Uses Wikipedia API to search for articles relevant to the location name.
 
 function loadData(place) {
 
@@ -367,4 +322,3 @@ function loadData(place) {
 
     return false;
 };
-
