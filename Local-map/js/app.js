@@ -20,7 +20,7 @@ function initMap() {
   // Bias the searchbox to within the bounds of the map.
   searchBox.setBounds(map.getBounds());
   
-  var largeInfowindow = new google.maps.InfoWindow();
+  
 
   // The following group uses the location array (lcoations.js) to create an array of markers on initialize.
   
@@ -61,96 +61,59 @@ function initMap() {
  
 }
 
-// This function will loop through the markers array and display real-estate.
-function searchMuseums() {
+// Extend the boundaries of the map for each marker and display the marker
+function search(i) {
   hideMarkers(placeMarkers);
-  
   var bounds = new google.maps.LatLngBounds();
-  // Extend the boundaries of the map for each marker and display the marker
-  for (var i = 0; i < placeMarkers.length; i++) {
-    if (placeMarkers[i].type == 'museum-search') {
-      var placesService = new google.maps.places.PlacesService(map);
-        placesService.textSearch({
-          query: placeMarkers[i].title,
-          bounds: bounds
-        }, function(results, status) {
-          if (status === google.maps.places.PlacesServiceStatus.OK) {
-            createMarkersForPlaces(results);
-          }
-        });
-        bounds.extend(myLatLng);      
-    }    
-  }
-  map.fitBounds(bounds);
-}
-     
-// This function will loop through the markers array and display restaurants.
-function searchRestaurants() {
-  hideMarkers(placeMarkers);
-  
-  var bounds = new google.maps.LatLngBounds();
-  // Extend the boundaries of the map for each marker and display the marker
-  for (var i = 0; i < placeMarkers.length; i++) {
-    if (placeMarkers[i].type == 'restaurant-search') {
-      var placesService = new google.maps.places.PlacesService(map);
-        placesService.textSearch({
-          query: placeMarkers[i].title,
-          bounds: bounds
-        }, function(results, status) {
-          if (status === google.maps.places.PlacesServiceStatus.OK) {
-            createMarkersForPlaces(results);
-          }
-        });
-        bounds.extend(myLatLng);      
-    }    
-  }
+  var placesService = new google.maps.places.PlacesService(map);
+    placesService.textSearch({
+      query: placeMarkers[i].title,
+      bounds: bounds
+    }, function(results, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        createMarkersForPlaces(results);
+      }
+    });
   map.fitBounds(bounds);
 }
 
 // This function will loop through the markers array and display museums.
-function searchBars() {
-  hideMarkers(placeMarkers);
-  
+function searchMuseums() {
+  for (var i = 0; i < placeMarkers.length; i++) {
+    if (placeMarkers[i].type == 'museum-search') {
+      search(i);
+    }    
+  }  
+}
+     
+// This function will loop through the markers array and display restaurants.
+function searchRestaurants() {
   var bounds = new google.maps.LatLngBounds();
-  // Extend the boundaries of the map for each marker and display the marker
+  for (var i = 0; i < placeMarkers.length; i++) {
+    if (placeMarkers[i].type == 'restaurant-search') {
+      search(i);              
+    }    
+  }  
+}
+
+// This function will loop through the markers array and display bars.
+function searchBars() {  
+  var bounds = new google.maps.LatLngBounds();
   for (var i = 0; i < placeMarkers.length; i++) {
     if (placeMarkers[i].type == 'bar-search') {
-      var placesService = new google.maps.places.PlacesService(map);
-        placesService.textSearch({
-          query: placeMarkers[i].title,
-          bounds: bounds
-        }, function(results, status) {
-          if (status === google.maps.places.PlacesServiceStatus.OK) {
-            createMarkersForPlaces(results);
-          }
-        });
-        bounds.extend(myLatLng);      
+      search(i);              
     }    
-  }
-  map.fitBounds(bounds);
+  }  
 }
 
 // This function will loop through the markers array and display shops.
-function searchShops() {
-  hideMarkers(placeMarkers);
-  
+function searchShops() { 
   var bounds = new google.maps.LatLngBounds();
-  // Extend the boundaries of the map for each marker and display the marker
   for (var i = 0; i < placeMarkers.length; i++) {
     if (placeMarkers[i].type == 'shop-search') {
-      var placesService = new google.maps.places.PlacesService(map);
-        placesService.textSearch({
-          query: placeMarkers[i].title,
-          bounds: bounds
-        }, function(results, status) {
-          if (status === google.maps.places.PlacesServiceStatus.OK) {
-            createMarkersForPlaces(results);
-          }
-        });
-        bounds.extend(myLatLng);      
+      search(i);              
     }    
   }
-  map.fitBounds(bounds);
 }
 
 // This function will loop through the listings and hide them all.
@@ -165,7 +128,7 @@ function hideMarkers(markers) {
 function searchBoxPlaces(searchBox) {
   hideMarkers(placeMarkers);
   var places = searchBox.getPlaces();
-  if (places.length == 0) {
+  if (places.length === 0) {
     window.alert('We did not find any places matching that search!');
   } else {
   // For each place, get the icon, name and location.
@@ -314,11 +277,11 @@ function loadData(place) {
                 articleStr = articleList[i];
                 var url = 'https://en.wikipedia.org/wiki/' + articleStr;
                 $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li>');
-            };
+            }
 
             clearTimeout(wikiRequestTimeout);
         }
     });
 
     return false;
-};
+}
