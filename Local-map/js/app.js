@@ -88,7 +88,6 @@ function searchMuseums() {
      
 // This function will loop through the markers array and display restaurants.
 function searchRestaurants() {
-  var bounds = new google.maps.LatLngBounds();
   for (var i = 0; i < placeMarkers.length; i++) {
     if (placeMarkers[i].type == 'restaurant-search') {
       search(i);              
@@ -98,7 +97,6 @@ function searchRestaurants() {
 
 // This function will loop through the markers array and display bars.
 function searchBars() {  
-  var bounds = new google.maps.LatLngBounds();
   for (var i = 0; i < placeMarkers.length; i++) {
     if (placeMarkers[i].type == 'bar-search') {
       search(i);              
@@ -108,7 +106,6 @@ function searchBars() {
 
 // This function will loop through the markers array and display shops.
 function searchShops() { 
-  var bounds = new google.maps.LatLngBounds();
   for (var i = 0; i < placeMarkers.length; i++) {
     if (placeMarkers[i].type == 'shop-search') {
       search(i);              
@@ -152,6 +149,7 @@ function textSearchPlaces() {
   });
 }
 
+
 // This function creates markers for each place found in either places search.
 function createMarkersForPlaces(places) {
   var bounds = new google.maps.LatLngBounds();
@@ -178,12 +176,12 @@ function createMarkersForPlaces(places) {
     // so that only one is open at once.
     var placeInfoWindow = new google.maps.InfoWindow();
     // If a marker is clicked, do a place details search on it in the next function.
-    marker.addListener('click', function() {
+    marker.addListener('click', function() {      
       if (placeInfoWindow.marker == this) {
-        console.log("This infowindow already is on this marker!");
+        alert("This infowindow already is on this marker!");
       } else {
+         
         getPlacesDetails(this, placeInfoWindow);
-
       }
     });
     placeMarkers.push(marker);
@@ -201,6 +199,7 @@ function createMarkersForPlaces(places) {
 // executed when a marker is selected, indicating the user wants more
 // details about that place.
 function getPlacesDetails(marker, infowindow) {
+marker.setAnimation( google.maps.Animation.DROP );
 var service = new google.maps.places.PlacesService(map);
 service.getDetails({
   placeId: marker.id
@@ -235,6 +234,7 @@ service.getDetails({
     innerHTML += '</div>';
     infowindow.setContent(innerHTML);
     infowindow.open(map, marker);
+
     //Uses wikipedia API to search for articles relevant to the location name.
     loadData(place.name);
     // Make sure the marker property is cleared if the infowindow is closed.
