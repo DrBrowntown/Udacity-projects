@@ -3,6 +3,8 @@ var map;
 // Create placemarkers array to use in multiple functions to have control
 // over the number of places that show.
 var placeMarkers = [];
+var google;
+
 
 function initMap() {
    
@@ -149,6 +151,17 @@ function textSearchPlaces() {
   });
 }
 
+// function errorForDuplicateInfoWindow() {
+//   // Create a single infowindow to be used with the place details information
+//   // so that only one is open at once.
+//   var placeInfoWindow = new google.maps.InfoWindow();     
+//   if (placeInfoWindow.marker == this) {
+//     alert("This infowindow already is on this marker!");
+//   } else {         
+//     getPlacesDetails(this, placeInfoWindow);
+//   }
+// }  
+
 
 // This function creates markers for each place found in either places search.
 function createMarkersForPlaces(places) {
@@ -179,8 +192,7 @@ function createMarkersForPlaces(places) {
     marker.addListener('click', function() {      
       if (placeInfoWindow.marker == this) {
         alert("This infowindow already is on this marker!");
-      } else {
-         
+      } else {         
         getPlacesDetails(this, placeInfoWindow);
       }
     });
@@ -244,6 +256,10 @@ service.getDetails({
   }
 });
 }
+
+window.mapError = function( errorMsg, url, lineNumber ) {
+    alert( 'Google Maps Failed To Load' );
+};
 
 //Uses Wikipedia API to search for articles relevant to the location name.
 
