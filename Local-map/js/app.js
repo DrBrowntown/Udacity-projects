@@ -24,7 +24,7 @@ function initMap() {
   
   
 
-  // The following group uses the location array (lcoations.js) to create an array of markers on initialize.
+  // The following group uses the location array (locations.js) to create an array of markers on initialize.
   
   for (var i = 0; i < locations.length; i++) {  
     var title = locations[i].title;
@@ -151,20 +151,15 @@ function textSearchPlaces() {
   });
 }
 
-// function errorForDuplicateInfoWindow() {
-//   // Create a single infowindow to be used with the place details information
-//   // so that only one is open at once.
-//   var placeInfoWindow = new google.maps.InfoWindow();     
-//   if (placeInfoWindow.marker == this) {
-//     alert("This infowindow already is on this marker!");
-//   } else {         
-//     getPlacesDetails(this, placeInfoWindow);
-//   }
-// }  
-
-
 // This function creates markers for each place found in either places search.
 function createMarkersForPlaces(places) {
+  var errorForDuplicateInfoWindow = function() {      
+      if (placeInfoWindow.marker == this) {
+        alert("This infowindow already is on this marker!");
+      } else {         
+        getPlacesDetails(this, placeInfoWindow);
+      }
+    };
   var bounds = new google.maps.LatLngBounds();
   for (var i = 0; i < places.length; i++) {
     var place = places[i];
@@ -189,13 +184,7 @@ function createMarkersForPlaces(places) {
     // so that only one is open at once.
     var placeInfoWindow = new google.maps.InfoWindow();
     // If a marker is clicked, do a place details search on it in the next function.
-    marker.addListener('click', function() {      
-      if (placeInfoWindow.marker == this) {
-        alert("This infowindow already is on this marker!");
-      } else {         
-        getPlacesDetails(this, placeInfoWindow);
-      }
-    });
+    marker.addListener('click', errorForDuplicateInfoWindow);
     placeMarkers.push(marker);
     if (place.geometry.viewport) {
       // Only geocodes have viewport.

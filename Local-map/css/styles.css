@@ -3,6 +3,7 @@ html,
 body {
   font-family: Arial, sans-serif;
   height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
 }
@@ -63,10 +64,6 @@ hr {
   margin: 0;
 }
 
-#pano {
-  width: 200px;
-  height: 200px;
-}
 
 #places-search,
 #search-within-time-text {
