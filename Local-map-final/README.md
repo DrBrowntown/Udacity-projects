@@ -1,6 +1,6 @@
 # Local Map
 
-Udacity project with google maps and Wikipedia API.
+Udacity project with Google maps and Wikipedia API.
 
 ## Instructions:
 * Extract files.
@@ -9,7 +9,7 @@ Udacity project with google maps and Wikipedia API.
 ## Features:
 * Google map loaded from Maps API.
 * Map markers located at Points of Interest
-* Points of Interest markers can be filtered via buttons in the sidebar
+* Points of Interest markers can be filtered via filter locations search bar in the sidebar
 * Markers show information and wikipedia links for the chosen place when clicked.
 
 ## Attributions:
@@ -17,7 +17,5 @@ Udacity project with google maps and Wikipedia API.
 (https://developers.google.com/maps/)
 * Wikipedia API
 (https://www.mediawiki.org/wiki/API:Main_page)
-* Bootstrap
-(https://startbootstrap.com/template-overviews/simple-sidebar) 
 * Snazzy Maps
 (https://snazzymaps.com)

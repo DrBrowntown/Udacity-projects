@@ -6,36 +6,41 @@
     <meta name="Local map project detailing Park Slope">
     <meta name="Calvin Brownlee">
     <title>Map Project</title>
-    <!-- Project App -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <!-- CSS stylesheet -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="js/styles.js"></script>
   </head>
   <body>
-      <div class="container">
-        <h1 id="title">Park Slope</h1>
+      <div class="container">       
+        <div class="options-box">
+          <div class="header"> 
+              <h1>Park Slope Local Map</h1>          
+          </div>
+              <p id="search">Filter Locations:</p>
+              <input id="filter" name="Filter" data-bind="value: filter, valueUpdate: 'afterkeydown'" />
 
-        <div class="options-box">           
-
-            <p id="search">Filter Locations:</p>
-            <input id="filter" name="Filter" data-bind="value: filter, valueUpdate: 'afterkeydown'" />
-
-            <ul id="list" data-bind="foreach: filteredLocations">
-                <li data-bind="text: name, click: $parent.showMarker"></li>
-            </ul>
-            <div class="wikipedia-container">
-              <h3 id="wikipedia-header">Wikipedia Links</h3>
-              <ul id="wikipedia-links"></ul>
-            </div>
+              <ul id="list" data-bind="foreach: filteredLocations">
+                  <li data-bind="text: name, click: $parent.showMarker"></li>
+              </ul>
+              <div class="wikipedia-container">
+                <h2>Wikipedia Links</h3>
+                <ul id="wikipedia-links"></ul>
+              </div>
         </div>
 
         <div id="map" data-bind="map:myMap"></div>
-
-        <p id="disclaimer">*Powered by Google Maps</p>
+      
+        <p id="disclaimer">*Powered by Google Maps and Wikipedia</p>
       </div>
-      <script src='js/knockout-3.4.2.js'></script>
-      <script src="js/app.js"></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>            
+       <!--Knockout library -->
+      <script src='js/lib/knockout-3.4.2.js'></script>
+      <!--Load app -->
+      <script src="js/model.js"></script>
+      <script src="js/viewModel.js"></script>
+      <script src="js/view.js"></script>
+      <!--Jquery library -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> 
+      <!-- Google Javascrip API-->           
       <script async defer onerror="mapError()" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBE7R1T6QtgmMVMATExL1r7OB_FktDALRI&v=3&callback=initMap">
       </script>     
   </body>
