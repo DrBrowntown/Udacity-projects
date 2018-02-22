@@ -281,6 +281,7 @@ function loadData(place) {
             for (var i = 0; i < articleList.length; i++) {
                 articleStr = articleList[i];
                 var url = 'https://en.wikipedia.org/wiki/' + articleStr;
+                console.log(url);
                 $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li>');
             }
 

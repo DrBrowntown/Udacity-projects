@@ -1,5 +1,6 @@
 body {
   background-color: white;
+  font-family: "Gill Sans", sans-serif;
  
 }
 
@@ -45,25 +46,25 @@ h2 {
 }
 
 
-#list {
+.list {
   color: white; 
   padding-left: 15px;
   line-height: 20px;
 }
 
-#search {
+.search {
   margin-bottom: 5px;
   color:white;
   line-height: 15px;
   
 }
 
-#filter {
+.filter {
   width: 75%;
   margin-bottom: 15px;
 }
 
-#disclaimer {
+.disclaimer {
   color: white;
   line-height: 10px;
   font-size: 0.7em;
@@ -73,7 +74,7 @@ h2 {
 }
 
 a {
-  color: lightgrey;
+  color: red;
 }
 
 @media only screen and (max-width: 800px) {
@@ -86,12 +87,13 @@ a {
   #map {
     grid-column: 1 / 4;
     grid-row: 2;
-    height: 450px,
+    height: 450px;
 
   }
   .options-box {
     grid-column: 1 / 4;
     grid-row: 1;
+
   }
 
   

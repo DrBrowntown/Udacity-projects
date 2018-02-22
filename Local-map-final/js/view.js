@@ -21,7 +21,6 @@ var initMap = function() {
 //Runs bounce animation, wiki api, and infowindow population  
   var clickInfoWindow = function() {
       markerBounce(this, marker);
-      loadWikiData(this.title);
       populateInfoWindow(this, largeInfoWindow);      
     };
 // The following group uses the location array (locations.js) to create an array of markers on initialize.
@@ -44,21 +43,43 @@ var initMap = function() {
     //extends boundries of the map for each marker
     bounds.extend(marker.position); 
      // Create an onclick event to open the large infowindow at each marker.
-    marker.addListener('click', clickInfoWindow);
-    
-  }
-  ko.applyBindings(new ViewModel());
+    marker.addListener('click', clickInfoWindow);    
+  }  
   
   //###########Populates info window
   var populateInfoWindow = function(marker, infowindow) {
+            
+      //Error handling for if something breaks in the wiki API
+      var wikiRequestTimeout = setTimeout(function() {
+          alert("Failed to get Wikipedia resources.");
+      }, 8000);
 
       if (infowindow.marker != marker) {
           infowindow.marker = marker;
-          infowindow.setContent('<div>' + marker.title +
-              '<p>' + marker.address + '</div>');
-          infowindow.open(map, marker);
-          //Uses wikipedia API to search for articles relevant to the location name.
+           //Uses Wikipedia API to search for articles relevant to the location name and places them in the infowindow.
+          var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title + '&format=json';
+          console.log(wikiUrl);
+          $.ajax({
+            url: wikiUrl,
+            dataType: "jsonp",
+            //jsonp: "callback"
+            success: function( response ) {
+                console.log( response );              
+                
+                var articleList = response[1];
+                for (var i = 0; i < articleList.length; i++) {
+                    var articleStr = articleList[i];
+                    var url = 'https://en.wikipedia.org/wiki/' + articleStr;
+                    console.log(url);
+                    infowindow.setContent('<div>' + marker.title +
+              '<p>' + marker.address + '<p>' + '<a href="' + url + '">' + 'Wikipedia Article' + '</a>' + '</div>');              
+                }
+                clearTimeout(wikiRequestTimeout);            
+            }
+          });
           
+          infowindow.open(map, marker);         
+         
           infowindow.addListener('closeclick', function() {
             infowindow.marker = null;
           });
@@ -75,51 +96,10 @@ var initMap = function() {
           marker.setAnimation(google.maps.Animation.NULL);
       }
   };
+  ko.applyBindings(new ViewModel());
 };  
 
 //Error message if Google Maps is uanble to load  
 window.mapError = function( errorMsg, url, lineNumber ) {
     alert( 'Google Maps Failed To Load' );
 };
-
-//Uses Wikipedia API to search for articles relevant to the location name.
-
-function loadWikiData(place) {
-
-    var $body = $('body');
-    var $wikiElem = $('#wikipedia-links');    
-
-    // clear out old data before new request
-    $wikiElem.text("");  
-    
-    var cityStr = place;    
-   
-    //Error handling for if something breaks in the wiki API
-    var wikiRequestTimeout = setTimeout(function() {
-        $wikiElem.text("Failed to get Wikipedia resources.");
-    }, 8000);
-    
-   //load wikipedia articles 
-    var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + cityStr + '&format=json';
-    console.log(wikiUrl);
-    //gets json file from wiki api
-    $.ajax({
-        url: wikiUrl,
-        dataType: "jsonp",
-        //jsonp: "callback"
-        success: function( response ) {
-            var articleList = response[1];
-
-            for (var i = 0; i < articleList.length; i++) {
-                var articleStr = articleList[i];
-                var url = 'https://en.wikipedia.org/wiki/' + articleStr;
-                $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li>');
-            }
-
-
-            clearTimeout(wikiRequestTimeout);
-        }
-    });
-
-    return false;
-}

@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=yes" name="viewport">
-    <meta name="Local map project detailing Park Slope">
-    <meta name="Calvin Brownlee">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <meta name="description" content="Local map project detailing Park Slope">
+    <meta name="author" content="Calvin Brownlee">
     <title>Map Project</title>
     <!-- CSS stylesheet -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -16,21 +16,18 @@
           <div class="header"> 
               <h1>Park Slope Local Map</h1>          
           </div>
-              <p id="search">Filter Locations:</p>
-              <input id="filter" name="Filter" data-bind="value: filter, valueUpdate: 'afterkeydown'" />
+              <p class="search">Filter Locations:</p>
+              <input class="filter" name="Filter" data-bind="value: filter, valueUpdate: 'afterkeydown'" />
 
-              <ul id="list" data-bind="foreach: filteredLocations">
+              <ul class="list" data-bind="foreach: filteredLocations">
                   <li data-bind="text: name, click: $parent.showMarker"></li>
               </ul>
-              <div class="wikipedia-container">
-                <h2>Wikipedia Links</h3>
-                <ul id="wikipedia-links"></ul>
+              <div class="wikipedia-container">                
+                <ul class="wikipedia-links"></ul>                  
               </div>
         </div>
-
-        <div id="map" data-bind="map:myMap"></div>
-      
-        <p id="disclaimer">*Powered by Google Maps and Wikipedia</p>
+        <div id="map" data-bind="map:myMap"></div>      
+        <p class="disclaimer">*Powered by Google Maps and Wikipedia</p>
       </div>
        <!--Knockout library -->
       <script src='js/lib/knockout-3.4.2.js'></script>
